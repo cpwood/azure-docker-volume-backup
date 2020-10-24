@@ -33,7 +33,7 @@ docker run --name azure-docker-volume-backup \
 1. Find the backup file you want to restore using [Azure Storage Explorer](https://azure.microsoft.com/en-gb/features/storage-explorer/).
 2. Right-click on the file and choose **Get Shared Access Signature**. Then click **Create**.
 3. Click **Copy** next to **URI**,
-4. Start up an Ubuntu shell and mount the volume you want to restore to: `docker run -it --mount source=my-vol,destination=/my-vol alpine /bin/sh` .
+4. Start up an Alpine shell and mount the volume you want to restore to: `docker run -it --mount source=my-vol,destination=/my-vol alpine /bin/sh` .
 5. From the shell, download the backup: `wget -O backup.tar.gz "<url-you-copied>"` (the quotes around the URL are important).
 6. Untar the backup to the volume you mounted: `tar -xf backup.tar.gz -C /my-vol`.
-7. Use `Ctrl+D` to exit the shell.
+7. Use `Ctrl + D` to exit the shell.
