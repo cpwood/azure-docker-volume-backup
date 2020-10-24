@@ -68,3 +68,6 @@ jobs:
             --platform linux/amd64,linux/arm/v7,linux/arm64 .
       - name: Docker Hub README & description sync
         uses: meeDamian/sync-readme@v1.0.6
+        with:
+          pass: ${{ secrets.DOCKER_PASSWORD }}
+          description: true
