@@ -66,3 +66,5 @@ jobs:
             --tag ${{ env.IMAGE }}:${{ steps.version.outputs.info }} \
             --build-arg DLL=${{ env.DLL }} \
             --platform linux/amd64,linux/arm/v7,linux/arm64 .
+      - name: Docker Hub README & description sync
+        uses: meeDamian/sync-readme@v1.0.6
