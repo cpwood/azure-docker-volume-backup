@@ -1,0 +1,68 @@
+name: build our image
+
+on:
+  push:
+    branches: main
+
+env:
+  SLN: /src/AzureDockerVolumeBackup.sln
+  VERSION_PROJECT: src/AzureDockerVolumeBackup.csproj
+  DLL: AzureDockerVolumeBackup.dll
+  IMAGE: cpwood/azure-docker-volume-backup
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v2
+      - name: Read file
+        id: read
+        uses: juliangruber/read-file-action@v1.0.0
+        with:
+          path: ${{ env.VERSION_PROJECT }}
+      - name: Replace version number
+        id: replace
+        uses: frabert/replace-string-action@v1.2
+        with:
+          pattern: '\>([0-9+]\.[0-9]+)\.[0-9+]\<'
+          flags: g
+          string: ${{ steps.read.outputs.content }}
+          replace-with: '>$1.${{ github.run_number }}<'
+      - name: Write file
+        id: write
+        uses: DamianReeves/write-file-action@v1.0
+        with:
+          path: ${{ env.VERSION_PROJECT }}
+          contents: ${{ steps.replace.outputs.replaced }}
+          write-mode: overwrite
+      - name: Get final version number
+        id: version
+        uses: mavrosxristoforos/get-xml-info@1.0
+        with:
+          xml-file: ${{ env.VERSION_PROJECT }}
+          xpath: //PropertyGroup/AssemblyVersion
+      - name: create publish folder
+        run: mkdir publish
+      - name: build amd64
+        run: docker run -v ${{ github.workspace }}/src:/src -v ${{ github.workspace }}/publish:/publish mcr.microsoft.com/dotnet/core/sdk:3.1 /bin/bash -c "dotnet restore ${{ env.SLN }} -r linux-musl-x64; dotnet publish ${{ env.SLN }} -c release -o /publish/linux/amd64 -r linux-musl-x64 --self-contained false --no-restore"
+      - name: build arm32
+        run: docker run -v ${{ github.workspace }}/src:/src -v ${{ github.workspace }}/publish:/publish mcr.microsoft.com/dotnet/core/sdk:3.1 /bin/bash -c "dotnet restore ${{ env.SLN }} -r linux-arm; dotnet publish ${{ env.SLN }} -c release -o /publish/linux/arm/v7 -r linux-arm --self-contained false --no-restore"
+      - name: build arm64
+        run: docker run -v ${{ github.workspace }}/src:/src -v ${{ github.workspace }}/publish:/publish mcr.microsoft.com/dotnet/core/sdk:3.1 /bin/bash -c "dotnet restore ${{ env.SLN }} -r linux-musl-arm64; dotnet publish ${{ env.SLN }} -c release -o /publish/linux/arm64 -r linux-musl-arm64 --self-contained false --no-restore"
+      - name: install buildx
+        id: buildx
+        uses: crazy-max/ghaction-docker-buildx@v1
+        with:
+          version: latest
+      - name: login to docker hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u cpwood --password-stdin
+      - name: build the image
+        run: |
+          docker buildx build \
+            --push \
+            --file src/Dockerfile \
+            --tag ${{ env.IMAGE }}:latest \
+            --tag ${{ env.IMAGE }}:${{ steps.version.outputs.info }} \
+            --build-arg DLL=${{ env.DLL }} \
+            --platform linux/amd64,linux/arm/v7,linux/arm64 .
