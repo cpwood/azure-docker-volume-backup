@@ -351,3 +351,4 @@ MigrationBackup/
 
 appsettings.debug.json
 .idea/
+!src/Backups
