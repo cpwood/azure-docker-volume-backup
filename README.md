@@ -14,7 +14,7 @@ The following environment variables allow you to configure the software:
 * `ACCOUNT` (required) - the name of the Azure Blob Storage account (without the `core.windows.net` suffix);
 * `KEY` (required) - the access key;
 * `CONTAINER` - the name of the blob container (defaults to `docker`);
-* `SCHEDULE` - a [Crontab expression](https://crontab-generator.org/) that controls the timing and frequency of backup runs (defaults to 2am every morning);
+* `SCHEDULE` - a [Crontab expression](https://crontab-generator.org/) that controls the timing and frequency of backup runs (defaults to 2am every morning - `0 0 2 * * *`);
 * `DAYSTOKEEP` - an integer value (defaults to keeping the last `7` days).
 
 You must also mount the volumes you want to back up under `/volumes`.
@@ -25,7 +25,7 @@ docker run --name azure-docker-volume-backup \
     -e ACCOUNT=foo \
     -e KEY=sfh9sh0shsf0h0sfh \
     -e CONTAINER=docker \
-    cpwood/azure-docker-storage-volume-backup:latest
+    cpwood/azure-docker-volume-backup:latest
 ```
 
 ## Restoring a Backup
