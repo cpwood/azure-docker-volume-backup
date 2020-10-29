@@ -86,6 +86,13 @@ namespace AzureDockerVolumeBackup.Backups
                     foreach (var file in files)
                     {
                         _logger.LogTrace($"Archiving '{file}' ..");
+
+                        if (_fileService.IsFileLocked(file))
+                        {
+                            _logger.LogWarning($"File '{file}' is locked and cannot be read. It isn't included in the backup.");
+                            continue;
+                        }
+                        
                         var tarEntry = TarEntry.CreateEntryFromFile(file);
                         tarEntry.Name = file;
                         tarArchive.WriteEntry(tarEntry, true);

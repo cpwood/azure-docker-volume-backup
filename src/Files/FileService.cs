@@ -38,5 +38,26 @@ namespace AzureDockerVolumeBackup.Files
             if (File.Exists(file))
                 File.Delete(file);
         }
+
+        public bool IsFileLocked(string file)
+        {
+            FileStream stream = null;
+
+            try
+            {
+                stream = new FileStream(file, FileMode.Open, FileAccess.Read);
+                stream.ReadByte();
+                return false;
+            }
+            catch (IOException)
+            {
+                return true;
+            }
+            finally
+            {
+                stream?.Close();
+                stream?.Dispose();
+            }
+        }
     }
 }

@@ -9,5 +9,6 @@ namespace AzureDockerVolumeBackup.Files
         Stream OpenFile(string file);
         Stream WriteFile(string file);
         void DeleteIfExists(string file);
+        bool IsFileLocked(string file);
     }
 }
