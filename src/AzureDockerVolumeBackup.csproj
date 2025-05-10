@@ -2,22 +2,22 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <Title>Azure Docker Volume Backup</Title>
         <Authors>Chris Wood</Authors>
         <PackageLicenseUrl>https://licenses.nuget.org/MIT</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/cpwood/azure-docker-volume-backup</RepositoryUrl>
-        <AssemblyVersion>1.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0</AssemblyVersion>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Azure.Storage.Blobs" Version="12.6.0" />
-      <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.9" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.9" />
-      <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.9" />
-      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.9" />
-      <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.9" />
-      <PackageReference Include="Quartz" Version="3.2.2" />
+      <PackageReference Include="Azure.Storage.Blobs" Version="12.24.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.4" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.4" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.4" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.4" />
+      <PackageReference Include="Quartz" Version="3.14.0" />
       <PackageReference Include="Quartz.Lambda" Version="1.0.5" />
       <PackageReference Include="SharpZipLib.NETStandard" Version="1.0.7" />
     </ItemGroup>

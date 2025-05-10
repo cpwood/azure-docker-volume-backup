@@ -34,7 +34,7 @@ namespace AzureDockerVolumeBackup
                     .AddFilter("Microsoft", LogLevel.Warning)
                     .AddFilter("System", LogLevel.Warning)
                     .AddFilter("LoggingConsoleApp.Program", LogLevel.Debug)
-                    .AddConsole(x => x.TimestampFormat = "[yyyy-MM-dd HH:mm:ss]"))
+                    .AddSimpleConsole(x => x.TimestampFormat = "[yyyy-MM-dd HH:mm:ss]"))
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.Configure<Options>(hostContext.Configuration);
